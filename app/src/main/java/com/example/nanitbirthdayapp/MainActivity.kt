@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.nanitbirthdayapp.ui.birthday.BirthdayScreen
 import com.example.nanitbirthdayapp.ui.main.ConnectionScreen
 import com.example.nanitbirthdayapp.ui.main.MainViewModel
 import com.example.nanitbirthdayapp.ui.theme.NanitBirthdayAppTheme
@@ -28,7 +29,11 @@ class MainActivity : ComponentActivity() {
                         }
                     )
                 } else {
-                    // BirthdayScreen
+                    BirthdayScreen(
+                        birthdayInfo = uiState.birthdayInfo!!,
+                        imageUri = uiState.imageUri,
+                        onAddPictureClick = {},
+                    )
                 }
             }
         }

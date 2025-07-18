@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">NanitBirthdayApp</string>
+
+        <string name="today_birthday">Today %1$s is</string>
+     <string name="year_old">Year old!</string>
+        <string name="years_old">Years old!</string>
+        <string name="month_old">Month old!</string>
+        <string name="months_old">Months old!</string>
 </resources>
