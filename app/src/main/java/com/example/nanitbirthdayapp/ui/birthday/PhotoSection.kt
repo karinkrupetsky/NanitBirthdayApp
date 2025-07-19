@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.nanitbirthdayapp.R
 import com.example.nanitbirthdayapp.ui.birthday.constants.BirthdayConst
@@ -31,7 +33,10 @@ fun PhotoSection(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box {
+        Box(
+            modifier = Modifier.size(BirthdayConst.Dimens.babyImageSize),
+            contentAlignment = Alignment.Center
+        ) {
             val imageModifier = Modifier
                 .size(BirthdayConst.Dimens.babyImageSize)
                 .clip(CircleShape)
@@ -52,11 +57,19 @@ fun PhotoSection(
                 )
             }
 
+            // Camera icon positioned at 45° angle on the border line
+            val imageRadius = BirthdayConst.Dimens.babyImageSize / 2
+            val offSet = imageRadius.value * 0.707f // cos45 degrees
+
             Image(
                 painter = painterResource(id = theme.addPhotoIconRes),
                 contentDescription = "Add picture",
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
+                    .align(Alignment.Center)
+                    .offset(
+                        x = -offSet.dp,
+                        y = -offSet.dp
+                    )
                     .size(BirthdayConst.Dimens.cameraButtonSize)
                     .clickable(onClick = onCameraClick)
             )

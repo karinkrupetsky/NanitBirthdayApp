@@ -33,6 +33,7 @@ class MainActivity : ComponentActivity() {
                         birthdayInfo = uiState.birthdayInfo!!,
                         imageUri = uiState.imageUri,
                         onAddPictureClick = {},
+                        viewModel = viewModel
                     )
                 }
             }
