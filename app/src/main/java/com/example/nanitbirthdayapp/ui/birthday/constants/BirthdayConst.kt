@@ -40,5 +40,8 @@ object BirthdayConst {
             fontFamily = FontFamily.Companion.SansSerif,
             color = Color(0xFF394562)
         )
+
+        const val CONNECTION_SCREEN = "connection_screen"
+        const val BIRTHDAY_SCREEN = "birthday_screen"
     }
 }
