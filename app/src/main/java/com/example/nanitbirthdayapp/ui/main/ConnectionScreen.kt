@@ -6,11 +6,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.nanitbirthdayapp.ui.birthday.BirthdayUiState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConnectionScreen(
-    uiState: MainUiState,
+    uiState: BirthdayUiState,
     onConnectClick: (String, String) -> Unit
 ) {
     var ipAddress by remember { mutableStateOf("192.168.1.") }

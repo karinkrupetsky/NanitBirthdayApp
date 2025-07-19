@@ -28,18 +28,17 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.nanitbirthdayapp.R
-import com.example.nanitbirthdayapp.data.model.BirthdayInfo
-import com.example.nanitbirthdayapp.ui.main.MainViewModel
+import com.example.nanitbirthdayapp.domain.model.Birthday
 import com.example.nanitbirthdayapp.ui.theme.BirthdayTheme
 import com.example.nanitbirthdayapp.util.AgeCalculator
 
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalComposeApi::class)
 @Composable
 fun BirthdayScreen(
-    birthdayInfo: BirthdayInfo,
+    birthdayInfo: Birthday,
     imageUri: Uri?,
     onAddPictureClick: () -> Unit,
-    viewModel: MainViewModel
+    viewModel: BirthdayViewModel
 ) {
     var showPhotoPicker by rememberSaveable { mutableStateOf(false) }
 
@@ -130,19 +129,19 @@ fun BirthdayScreen(
 
 @Composable
 private fun getNumberImageRes(number: Int): Int {
-            return when (number) {
-                1 -> R.drawable.number_1
-                2 -> R.drawable.number_2
-                3 -> R.drawable.number_3
-                4 -> R.drawable.number_4
-                5 -> R.drawable.number_5
-                6 -> R.drawable.number_6
-                7 -> R.drawable.number_7
-                8 -> R.drawable.number_8
-                9 -> R.drawable.number_9
-                10 -> R.drawable.number_10
-                11 -> R.drawable.number_11
-                12 -> R.drawable.number_12
-                else -> R.drawable.number_0
-            }
-        }
+    return when (number) {
+        1 -> R.drawable.number_1
+        2 -> R.drawable.number_2
+        3 -> R.drawable.number_3
+        4 -> R.drawable.number_4
+        5 -> R.drawable.number_5
+        6 -> R.drawable.number_6
+        7 -> R.drawable.number_7
+        8 -> R.drawable.number_8
+        9 -> R.drawable.number_9
+        10 -> R.drawable.number_10
+        11 -> R.drawable.number_11
+        12 -> R.drawable.number_12
+        else -> R.drawable.number_0
+    }
+}
