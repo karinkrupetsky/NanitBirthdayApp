@@ -12,16 +12,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
-data class BirthdayUiState(
-    val isLoading: Boolean = false,
-    val birthdayInfo: Birthday? = null,
-    val error: String? = null,
-    val selectedImageUri: Uri? = null
-)
 
 @HiltViewModel
 class BirthdayViewModel @Inject constructor(
@@ -30,32 +22,42 @@ class BirthdayViewModel @Inject constructor(
     private val birthdayRepository: BirthdayRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(BirthdayUiState())
-    val uiState: StateFlow<BirthdayUiState> = _uiState.asStateFlow()
+    private val _errorMessage = MutableStateFlow<String?>(null)
+    val errorMessage: StateFlow<String?> = _errorMessage.asStateFlow()
+
+    private val _birthdayInfo = MutableStateFlow<Birthday?>(null)
+    val birthdayInfo: StateFlow<Birthday?> = _birthdayInfo.asStateFlow()
+
+    private val _selectedImageUri = MutableStateFlow<Uri?>(null)
+    val selectedImageUri: StateFlow<Uri?> = _selectedImageUri.asStateFlow()
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
     /**
      * Connect to the server and retrieve birthday info.
      */
     fun connectToServer(ip: String, port: String) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, error = null) }
+            _isLoading.value = true
+            _errorMessage.value = null
             val portNumber = port.toIntOrNull()
             if (portNumber == null) {
-                _uiState.update { it.copy(isLoading = false, error = "Invalid port number.") }
+                _isLoading.value = false
+                _errorMessage.value = "Invalid port number."
                 return@launch
             }
 
             getBirthdayInfoUseCase(ip, portNumber).collect { result ->
                 result.onSuccess { birthdayInfo ->
-                    _uiState.update {
-                        it.copy(isLoading = false, birthdayInfo = birthdayInfo, error = null)
-                    }
+                    _birthdayInfo.value = birthdayInfo
+                    _isLoading.value = false
+                    _errorMessage.value = null
                     // Load this baby's saved photo after updating state!
                     loadSavedPhoto(birthdayInfo.name)
                 }.onFailure { throwable ->
-                    _uiState.update {
-                        it.copy(isLoading = false, error = throwable.message)
-                    }
+                    _isLoading.value = false
+                    _errorMessage.value = throwable.message
                 }
             }
         }
@@ -67,7 +69,7 @@ class BirthdayViewModel @Inject constructor(
     private fun loadSavedPhoto(babyKey: String) {
         viewModelScope.launch {
             val savedUri = birthdayRepository.getSavedPicture(babyKey)
-            _uiState.update { it.copy(selectedImageUri = savedUri) }
+            _selectedImageUri.value = savedUri
         }
     }
 
@@ -76,10 +78,10 @@ class BirthdayViewModel @Inject constructor(
      */
     fun updatePicture(pictureUri: Uri?) {
         clearError()
-        val babyKey = _uiState.value.birthdayInfo?.name ?: return
+        val babyKey = _birthdayInfo.value?.name ?: return
 
         if (pictureUri == null) {
-            _uiState.update { it.copy(selectedImageUri = null) }
+            _selectedImageUri.value = null
             return
         }
 
@@ -87,24 +89,16 @@ class BirthdayViewModel @Inject constructor(
             updateBabyPictureUseCase(babyKey, pictureUri).collect { resource ->
                 when (resource) {
                     is Resource.Loading -> {
-                        _uiState.update { it.copy(isLoading = true) }
+                        _isLoading.value = true
                     }
                     is Resource.Success -> {
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                selectedImageUri = resource.data,
-                                error = null
-                            )
-                        }
+                        _isLoading.value = false
+                        _selectedImageUri.value = resource.data
+                        _errorMessage.value = null
                     }
                     is Resource.Error -> {
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false,
-                                error = resource.message
-                            )
-                        }
+                        _isLoading.value = false
+                        _errorMessage.value = resource.message
                     }
                 }
             }
@@ -115,14 +109,14 @@ class BirthdayViewModel @Inject constructor(
      * Clears the current error message.
      */
     fun clearError() {
-        _uiState.update { it.copy(error = null) }
+        _errorMessage.value = null
     }
 
     /**
      * Sets an error message.
      */
     fun setError(message: String) {
-        _uiState.update { it.copy(error = message) }
+        _errorMessage.value = message
     }
 
     override fun onCleared() {

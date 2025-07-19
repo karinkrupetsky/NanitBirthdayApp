@@ -35,30 +35,24 @@ import com.example.nanitbirthdayapp.util.AgeCalculator
 @OptIn(ExperimentalComposeUiApi::class, ExperimentalComposeApi::class)
 @Composable
 fun BirthdayScreen(
-    birthdayInfo: Birthday,
-    imageUri: Uri?,
-    onAddPictureClick: () -> Unit,
-    viewModel: BirthdayViewModel
+    viewModel: BirthdayViewModel,
+    onAddPictureClick: (Uri?) -> Unit,
 ) {
+    val birthdayInfo by viewModel.birthdayInfo.collectAsState()
+    val selectedImageUri by viewModel.selectedImageUri.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
     var showPhotoPicker by rememberSaveable { mutableStateOf(false) }
-
-    val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val age = AgeCalculator.getAge(birthdayInfo.dob)
-    val theme = BirthdayTheme.fromString(birthdayInfo.theme)
+    val birthdayData = birthdayInfo ?: return
+    val age = AgeCalculator.getAge(birthdayData.dob)
+    val theme = BirthdayTheme.fromString(birthdayData.theme)
     val ageNumberRes = getNumberImageRes(age.number)
+    val currentImageUri = selectedImageUri
 
-    val currentImageUri = uiState.selectedImageUri ?: imageUri
-
-    val handlePhotoSelected: (Uri?) -> Unit = { uri ->
-        uri?.let {
-            viewModel.updatePicture(it)
-        }
-    }
-
-    LaunchedEffect(uiState.error) {
-        uiState.error?.let { message ->
+    LaunchedEffect(errorMessage) {
+        errorMessage?.let { message ->
             snackbarHostState.showSnackbar(message)
             viewModel.clearError()
         }
@@ -81,7 +75,7 @@ fun BirthdayScreen(
             Spacer(modifier = Modifier.height(40.dp))
             
             AgeContentSection(
-                name = birthdayInfo.name,
+                name = birthdayData.name,
                 age = age,
                 ageNumberRes = ageNumberRes
             )
@@ -119,11 +113,9 @@ fun BirthdayScreen(
     // Photo Picker Dialog
     PhotoPickerDialog(
         isVisible = showPhotoPicker,
-        onPhotoSelected = handlePhotoSelected,
+        onPhotoSelected = { uri -> onAddPictureClick(uri) },
         onDismiss = { showPhotoPicker = false },
-        onError = { error ->
-            viewModel.setError(error)
-        }
+        onError = { error -> viewModel.setError(error) }
     )
 }
 

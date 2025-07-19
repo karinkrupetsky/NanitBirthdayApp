@@ -6,16 +6,19 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.nanitbirthdayapp.ui.birthday.BirthdayUiState
+import com.example.nanitbirthdayapp.ui.birthday.BirthdayViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConnectionScreen(
-    uiState: BirthdayUiState,
+    viewModel: BirthdayViewModel,
     onConnectClick: (String, String) -> Unit
 ) {
+    val isLoading by viewModel.isLoading.collectAsState()
+    val errorMessage by viewModel.errorMessage.collectAsState()
     var ipAddress by remember { mutableStateOf("192.168.1.") }
     var port by remember { mutableStateOf("8080") }
+
 
     Column(
         modifier = Modifier
@@ -49,7 +52,7 @@ fun ConnectionScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (uiState.isLoading) {
+        if (isLoading) {
             CircularProgressIndicator()
         } else {
             Button(onClick = { onConnectClick(ipAddress, port) }) {
@@ -57,7 +60,7 @@ fun ConnectionScreen(
             }
         }
 
-        uiState.error?.let {
+        errorMessage?.let {
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = it, color = MaterialTheme.colorScheme.error)
         }
