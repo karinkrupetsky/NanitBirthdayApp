@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.sp
 
 object BirthdayConst {
     object Dimens {
-        val screenPaddingTop = 22.dp
+        val screenPaddingTop = 46.dp
         val screenPaddingBottom = 15.dp
         // Age Section
         val ageTitleHorizontalPadding = 72.dp
@@ -29,10 +29,9 @@ object BirthdayConst {
         val nanitLogoHeight = 20.dp
         val spaceBetweenSections = 15.dp
         val spaceBetweenPhotoAndLogo = 30.dp
-        val logoToShareButtonSpacing = 70.dp
-        val shareButtonBottomSpacing = 70.dp
-        val shareButtonWidth = 0.7f
-        val shareButtonHeight = 50.dp
+        val shareButtonBottomSpacing = 32.dp
+        val shareButtonWidth = 179.dp
+        val shareButtonHeight = 42.dp
     }
 
     object TextStyles {
@@ -49,6 +48,15 @@ object BirthdayConst {
             fontWeight = FontWeight.Companion.Medium,
             fontFamily = FontFamily.Companion.SansSerif,
             color = Color(0xFF394562)
+        )
+
+        val shareButtonText = TextStyle(
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Normal,
+            fontFamily = FontFamily.SansSerif,
+            lineHeight = 16.sp,
+            letterSpacing = 0.sp,
+            color = Color.White
         )
     }
 

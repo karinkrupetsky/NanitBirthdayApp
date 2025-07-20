@@ -17,7 +17,7 @@ fun ConnectionScreen(
     navController: NavHostController
 ) {
     val uiState by viewModel.uiState.collectAsState()
-    var ipAddress by remember { mutableStateOf("192.168.176.36") }
+    var ipAddress by remember { mutableStateOf("192.168.1") }
     var port by remember { mutableStateOf("8080") }
 
     LaunchedEffect(uiState.birthdayInfo) {

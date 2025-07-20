@@ -26,8 +26,7 @@ data class BirthdayUiState(
     val isLoading: Boolean = false,
     val birthdayInfo: Birthday? = null,
     val selectedImageUri: Uri? = null,
-    val errorMessage: String? = null,
-    val isCapturingForShare: Boolean = false
+    val errorMessage: String? = null
 )
 
 @HiltViewModel
@@ -129,12 +128,10 @@ class BirthdayViewModel @Inject constructor(
     fun shareBirthday(onCaptureContent: suspend () -> Bitmap?) {
         viewModelScope.launch {
             try {
-                _uiState.update { it.copy(isCapturingForShare = true) }
-                delay(100)
-                //  Capture the content
+                // Capture the content
                 val bitmap = onCaptureContent()
                 if (bitmap != null) {
-                    //  Save bitmap and create share intent
+                    // Save bitmap and create share intent
                     val success = ShareHelper.saveBitmapAndShare(context, bitmap)
                     if (!success) {
                         _uiState.update { it.copy(errorMessage = "Failed to share image") }
@@ -144,8 +141,6 @@ class BirthdayViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 _uiState.update { it.copy(errorMessage = "Share failed: ${e.message}") }
-            } finally {
-                _uiState.update { it.copy(isCapturingForShare = false) }
             }
         }
     }

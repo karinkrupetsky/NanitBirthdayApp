@@ -31,15 +31,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.nanitbirthdayapp.R
 import com.example.nanitbirthdayapp.ui.birthday.constants.BirthdayConst
-import com.example.nanitbirthdayapp.ui.theme.BirthdayTheme
+import com.example.nanitbirthdayapp.ui.theme.getAgeNumberDrawable
+import com.example.nanitbirthdayapp.ui.theme.getBackgroundImageResource
+import com.example.nanitbirthdayapp.ui.theme.getThemeBackgroundColor
 import com.example.nanitbirthdayapp.ui.theme.shareBtnBg
 import com.example.nanitbirthdayapp.util.AgeCalculator
 
@@ -69,8 +73,7 @@ fun BirthdayScreen(
                 drawLayer(graphicsLayer)
             }
             .background(
-                uiState.birthdayInfo?.let {
-                    BirthdayTheme.fromString(it.theme).backgroundColor }
+                uiState.birthdayInfo?.theme?.getThemeBackgroundColor()
                     ?: MaterialTheme.colorScheme.background
             )
     ) {
@@ -123,31 +126,18 @@ private fun BirthdayContent(
 ) {
     val birthday = uiState.birthdayInfo ?: return
     val age = AgeCalculator.getAge(birthday.dob)
-    val ageNumberRes = getNumberImageRes(age.number)
-    val theme = BirthdayTheme.fromString(birthday.theme)
+    val ageNumberRes = age.number.getAgeNumberDrawable()
 
-    Image(
-        painter = painterResource(theme.overlayImageRes),
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier.fillMaxSize()
-    )
-
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .align(Alignment.TopCenter)
                 .padding(
                     top = BirthdayConst.Dimens.screenPaddingTop,
                     bottom = BirthdayConst.Dimens.screenPaddingBottom
                 ),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.height(20.dp))
-
-            // Age Section
             AgeContentSection(
                 name = birthday.name,
                 age = age,
@@ -155,73 +145,43 @@ private fun BirthdayContent(
             )
             Spacer(modifier = Modifier.height(BirthdayConst.Dimens.spaceBetweenSections))
 
-            // Baby image section with camera
-            Box(
+            PhotoSection(
+                imageUri = uiState.selectedImageUri,
+                theme = birthday.theme,
+                onCameraClick = onShowPhotoPicker,
                 modifier = Modifier
-                    .height(BirthdayConst.Dimens.babyImageSize)
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                PhotoSection(
-                    imageUri = uiState.selectedImageUri,
-                    theme = theme,
-                    onCameraClick = onShowPhotoPicker,
-                    modifier = Modifier
-                )
-            }
-
-            Spacer(modifier = Modifier.height(BirthdayConst.Dimens.spaceBetweenPhotoAndLogo))
-
-            // Nanit logo
-            Image(
-                painter = painterResource(id = R.drawable.logo_nanit),
-                contentDescription = "Nanit Logo",
-                modifier = Modifier
-                    .width(BirthdayConst.Dimens.nanitLogoWidth)
-                    .height(BirthdayConst.Dimens.nanitLogoHeight)
             )
-
-            Spacer(modifier = Modifier.height(18.dp))
         }
 
-        // Share the news button
-        if (!uiState.isCapturingForShare) {
-            Button(
-                onClick = onShareClick,
-                shape = MaterialTheme.shapes.large,
-                colors = ButtonDefaults.buttonColors(containerColor = shareBtnBg),
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = BirthdayConst.Dimens.shareButtonBottomSpacing)
-                    .fillMaxWidth(BirthdayConst.Dimens.shareButtonWidth)
-                    .height(BirthdayConst.Dimens.shareButtonHeight)
-            ) {
-                Text("Share the news")
-                Spacer(Modifier.width(8.dp))
-                Icon(
-                    imageVector = Icons.Default.Share,
-                    contentDescription = null
-                )
-            }
-        }
-    }
-}
+        Image(
+            painter = painterResource(birthday.theme.getBackgroundImageResource()),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter),
+            contentScale = ContentScale.FillHeight
+        )
 
-@Composable
-private fun getNumberImageRes(number: Int): Int {
-    return when (number) {
-        1 -> R.drawable.number_1
-        2 -> R.drawable.number_2
-        3 -> R.drawable.number_3
-        4 -> R.drawable.number_4
-        5 -> R.drawable.number_5
-        6 -> R.drawable.number_6
-        7 -> R.drawable.number_7
-        8 -> R.drawable.number_8
-        9 -> R.drawable.number_9
-        10 -> R.drawable.number_10
-        11 -> R.drawable.number_11
-        12 -> R.drawable.number_12
-        else -> R.drawable.number_0
+        Button(
+            onClick = onShareClick,
+            shape = MaterialTheme.shapes.large,
+            colors = ButtonDefaults.buttonColors(containerColor = shareBtnBg),
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = BirthdayConst.Dimens.shareButtonBottomSpacing)
+                .width(BirthdayConst.Dimens.shareButtonWidth)
+                .height(BirthdayConst.Dimens.shareButtonHeight)
+        ) {
+            Text(
+                text = "Share the news",
+                style = BirthdayConst.TextStyles.shareButtonText
+            )
+            Spacer(Modifier.width(8.dp))
+            Icon(
+                imageVector = Icons.Default.Share,
+                contentDescription = null,
+                tint = Color.White
+            )
+        }
     }
 }
