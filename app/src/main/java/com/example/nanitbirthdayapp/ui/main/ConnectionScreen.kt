@@ -6,19 +6,27 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.nanitbirthdayapp.ui.birthday.BirthdayViewModel
+import com.example.nanitbirthdayapp.ui.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ConnectionScreen(
     viewModel: BirthdayViewModel,
-    onConnectClick: (String, String) -> Unit
+    navController: NavHostController
 ) {
-    val isLoading by viewModel.isLoading.collectAsState()
-    val errorMessage by viewModel.errorMessage.collectAsState()
-    var ipAddress by remember { mutableStateOf("192.168.1.") }
+    val uiState by viewModel.uiState.collectAsState()
+    var ipAddress by remember { mutableStateOf("192.168.176.36") }
     var port by remember { mutableStateOf("8080") }
 
+    LaunchedEffect(uiState.birthdayInfo) {
+        if (uiState.birthdayInfo != null) {
+            navController.navigate(Screen.BirthdayScreen.route) {
+                popUpTo(Screen.ConnectionScreen.route) { inclusive = true }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -34,10 +42,7 @@ fun ConnectionScreen(
             value = ipAddress,
             onValueChange = { ipAddress = it },
             label = { Text("IP Address") },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unfocusedTextColor = MaterialTheme.colorScheme.onPrimary
-            )
+            isError = uiState.errorMessage != null
         )
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -45,22 +50,19 @@ fun ConnectionScreen(
             value = port,
             onValueChange = { port = it },
             label = { Text("Port") },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedTextColor = MaterialTheme.colorScheme.onPrimary,
-                unfocusedTextColor = MaterialTheme.colorScheme.onPrimary
-            )
+            isError = uiState.errorMessage != null
         )
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (isLoading) {
+        if (uiState.isLoading) {
             CircularProgressIndicator()
         } else {
-            Button(onClick = { onConnectClick(ipAddress, port) }) {
+            Button(onClick = { viewModel.connectToServer(ipAddress, port) }) {
                 Text("Connect")
             }
         }
 
-        errorMessage?.let {
+        uiState.errorMessage?.let {
             Spacer(modifier = Modifier.height(16.dp))
             Text(text = it, color = MaterialTheme.colorScheme.error)
         }

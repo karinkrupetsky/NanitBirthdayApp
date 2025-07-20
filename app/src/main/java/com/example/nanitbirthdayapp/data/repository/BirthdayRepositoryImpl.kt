@@ -5,6 +5,7 @@ import android.net.Uri
 import com.example.nanitbirthdayapp.core.Resource
 import com.example.nanitbirthdayapp.data.local.SharedPreferencesManager
 import com.example.nanitbirthdayapp.data.mapper.toDomain
+import com.example.nanitbirthdayapp.data.model.BirthdayInfo
 import com.example.nanitbirthdayapp.data.network.WebSocketClient
 import com.example.nanitbirthdayapp.domain.model.Birthday
 import com.example.nanitbirthdayapp.domain.repository.BirthdayRepository
@@ -14,6 +15,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
@@ -24,10 +26,33 @@ class BirthdayRepositoryImpl @Inject constructor(
     private val sharedPreferencesManager: SharedPreferencesManager
 ) : BirthdayRepository {
 
+    private val json = Json {
+        ignoreUnknownKeys = true
+        isLenient = true
+    }
+
     override suspend fun getBirthdayInfo(ip: String, port: Int): Flow<Result<Birthday>> {
         return webSocketClient.connect(ip, port).map { result ->
-            result.map { birthdayInfo ->
-                birthdayInfo.toDomain()
+            result.mapCatching { jsonResponse ->
+                parseResponse(jsonResponse).toDomain()
+            }
+        }
+    }
+
+    private fun parseResponse(jsonText: String): BirthdayInfo {
+        return when {
+            jsonText == "null" -> {
+                throw Exception("No data available. Please enter name and DOB in the server app.")
+            }
+            jsonText.isBlank() -> {
+                throw Exception("Empty response from server")
+            }
+            else -> {
+                try {
+                    json.decodeFromString<BirthdayInfo>(jsonText)
+                } catch (e: Exception) {
+                    throw Exception("Invalid data format from server")
+                }
             }
         }
     }
@@ -44,9 +69,7 @@ class BirthdayRepositoryImpl @Inject constructor(
                 if (!internalDir.exists()) {
                     internalDir.mkdirs()
                 }
-
-                val fileName = "baby_image_${System.currentTimeMillis()}.jpg"
-                val destinationFile = File(internalDir, fileName)
+                val destinationFile = File(internalDir, "$babyKey.jpg")
 
                 FileOutputStream(destinationFile).use { outputStream ->
                     inputStream.copyTo(outputStream)

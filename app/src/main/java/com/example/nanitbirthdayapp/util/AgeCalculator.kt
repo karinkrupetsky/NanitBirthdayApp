@@ -1,23 +1,26 @@
 package com.example.nanitbirthdayapp.util
 
-import android.os.Build
-import androidx.annotation.RequiresApi
-import java.time.LocalDate
-import java.time.Period
-import java.time.ZoneId
 import java.util.*
 
 object AgeCalculator {
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getAge(dobTimestamp: Long): Age {
-        val dob = LocalDate.ofInstant(Date(dobTimestamp).toInstant(), ZoneId.systemDefault())
-        val today = LocalDate.now()
-        val period = Period.between(dob, today)
+        val dob = Calendar.getInstance().apply { timeInMillis = dobTimestamp }
+        val today = Calendar.getInstance()
 
-        return if (period.years == 0) {
-            Age(period.months, AgeUnit.MONTH)
+        val years = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR)
+        val months = today.get(Calendar.MONTH) - dob.get(Calendar.MONTH)
+        val days = today.get(Calendar.DAY_OF_MONTH) - dob.get(Calendar.DAY_OF_MONTH)
+
+        var totalMonths = years * 12 + months
+        if (days < 0) {
+            totalMonths--
+        }
+
+        return if (totalMonths < 12) {
+            Age(maxOf(0, totalMonths), AgeUnit.MONTH)
         } else {
-            Age(period.years, AgeUnit.YEAR)
+            val ageInYears = minOf(9, totalMonths / 12) // Max age 9 per requirements
+            Age(ageInYears, AgeUnit.YEAR)
         }
     }
 }

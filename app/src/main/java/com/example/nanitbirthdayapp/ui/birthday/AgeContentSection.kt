@@ -19,8 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import com.example.nanitbirthdayapp.R
-import com.example.nanitbirthdayapp.util.Age
 import com.example.nanitbirthdayapp.ui.birthday.constants.BirthdayConst
+import com.example.nanitbirthdayapp.util.Age
 
 @Composable
 fun AgeContentSection(

@@ -1,17 +1,15 @@
 package com.example.nanitbirthdayapp.domain.usecase
 
 import android.net.Uri
-import com.example.nanitbirthdayapp.core.Resource
 import com.example.nanitbirthdayapp.domain.repository.BirthdayRepository
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class UpdateBabyPictureUseCase @Inject constructor(
+class GetSavedPictureUseCase @Inject constructor(
     private val repository: BirthdayRepository
 ) {
-    suspend operator fun invoke(name: String, dob: Long, pictureUri: Uri): Flow<Resource<Uri>> {
+    suspend operator fun invoke(name: String, dob: Long): Uri? {
         val babyKey = generateBabyKey(name, dob)
-        return repository.updateBabyPicture(babyKey, pictureUri)
+        return repository.getSavedPicture(babyKey)
     }
 
     private fun generateBabyKey(name: String, dob: Long): String {
