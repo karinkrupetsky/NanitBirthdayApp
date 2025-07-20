@@ -70,9 +70,13 @@ class BirthdayRepositoryImpl @Inject constructor(
                     internalDir.mkdirs()
                 }
                 val destinationFile = File(internalDir, "$babyKey.jpg")
+                if (destinationFile.exists()) {
+                    destinationFile.delete()
+                }
 
                 FileOutputStream(destinationFile).use { outputStream ->
                     inputStream.copyTo(outputStream)
+                    outputStream.flush()
                 }
 
                 inputStream.close()

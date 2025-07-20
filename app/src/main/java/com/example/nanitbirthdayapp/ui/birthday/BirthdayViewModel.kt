@@ -89,6 +89,8 @@ class BirthdayViewModel @Inject constructor(
             return
         }
 
+        _uiState.update { it.copy(selectedImageUri = pictureUri) }
+
         viewModelScope.launch {
             updateBabyPictureUseCase(
                 name = currentBirthdayInfo.name,
@@ -96,12 +98,21 @@ class BirthdayViewModel @Inject constructor(
                 pictureUri = pictureUri
             ).collect { resource ->
                 when (resource) {
-                    is Resource.Loading -> _uiState.update { it.copy(isLoading = true) }
+                    is Resource.Loading -> {
+                        _uiState.update { it.copy(isLoading = true) }
+                    }
                     is Resource.Success -> _uiState.update {
-                        it.copy(isLoading = false, selectedImageUri = resource.data, errorMessage = null)
+                        it.copy(
+                            isLoading = false, 
+                            selectedImageUri = resource.data, 
+                            errorMessage = null
+                        )
                     }
                     is Resource.Error -> _uiState.update {
-                        it.copy(isLoading = false, errorMessage = resource.message)
+                        it.copy(
+                            isLoading = false, 
+                            errorMessage = resource.message
+                        )
                     }
                 }
             }
