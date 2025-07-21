@@ -28,7 +28,7 @@ object BirthdayConst {
         val nanitLogoWidth = 59.dp
         val nanitLogoHeight = 20.dp
         val spaceBetweenSections = 15.dp
-        val spaceBetweenPhotoAndLogo = 30.dp
+        val spaceBetweenPhotoAndLogo = 20.dp
         val shareButtonBottomSpacing = 32.dp
         val shareButtonWidth = 179.dp
         val shareButtonHeight = 42.dp
