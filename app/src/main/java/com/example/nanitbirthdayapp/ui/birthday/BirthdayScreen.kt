@@ -41,6 +41,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.nanitbirthdayapp.R
 import com.example.nanitbirthdayapp.ui.birthday.constants.BirthdayConst
+import com.example.nanitbirthdayapp.ui.components.PhotoPickerDialog
 import com.example.nanitbirthdayapp.ui.theme.getAgeNumberDrawable
 import com.example.nanitbirthdayapp.ui.theme.getBackgroundImageResource
 import com.example.nanitbirthdayapp.ui.theme.getThemeBackgroundColor
