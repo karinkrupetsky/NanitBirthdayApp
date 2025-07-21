@@ -11,6 +11,7 @@ import com.example.nanitbirthdayapp.domain.model.Birthday
 import com.example.nanitbirthdayapp.domain.usecase.CloseConnectionUseCase
 import com.example.nanitbirthdayapp.domain.usecase.GetBirthdayInfoUseCase
 import com.example.nanitbirthdayapp.domain.usecase.GetSavedPictureUseCase
+import com.example.nanitbirthdayapp.domain.exception.InvalidConnectionParametersException
 import com.example.nanitbirthdayapp.domain.usecase.UpdateBabyPictureUseCase
 import com.example.nanitbirthdayapp.util.ShareHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -61,7 +62,11 @@ class BirthdayViewModel @Inject constructor(
                     // Load this baby's saved photo after updating state!
                     loadSavedPhoto(birthdayInfo.name, birthdayInfo.dob)
                 }.onFailure { throwable ->
-                    _uiState.value = BirthdayUiState(errorMessage = throwable.message)
+                    val errorMessage = when (throwable) {
+                        is InvalidConnectionParametersException -> context.getString(R.string.invalid_ip_or_port)
+                        else -> throwable.message
+                    }
+                    _uiState.value = BirthdayUiState(errorMessage = errorMessage)
                 }
             }
         }
