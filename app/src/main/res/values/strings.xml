@@ -1,9 +1,51 @@
 <resources>
     <string name="app_name">NanitBirthdayApp</string>
 
-        <string name="today_birthday">Today %1$s is</string>
-     <string name="year_old">Year old!</string>
-        <string name="years_old">Years old!</string>
-        <string name="month_old">Month old!</string>
-        <string name="months_old">Months old!</string>
+    <!-- Birthday celebration -->
+    <string name="today_birthday">Today %1$s is</string>
+    <string name="year_old">Year old!</string>
+    <string name="years_old">Years old!</string>
+    <string name="month_old">Month old!</string>
+    <string name="months_old">Months old!</string>
+
+    <!-- Connection screen -->
+    <string name="connect_to_server">Connect to Server</string>
+    <string name="ip_address">IP Address</string>
+    <string name="port">Port</string>
+    <string name="connect">Connect</string>
+    <string name="invalid_port_number">Invalid port number.</string>
+
+    <!-- Photo picker -->
+    <string name="choose_photo">Choose Photo</string>
+    <string name="choose_from_gallery">Choose from Gallery</string>
+    <string name="cancel">Cancel</string>
+    <string name="failed_to_capture_photo">Failed to capture photo</string>
+    <string name="no_image_selected">No image selected</string>
+    <string name="failed_to_open_gallery">Failed to open gallery: %1$s</string>
+
+    <!-- Share functionality -->
+    <string name="share_the_news">Share the news</string>
+    <string name="share_birthday_text">Check out this birthday celebration! 🎉</string>
+    <string name="share_subject">Happy Birthday!</string>
+    <string name="share_chooser_title">Share Birthday</string>
+    <string name="failed_to_share_image">Failed to share image</string>
+    <string name="failed_to_capture_screen">Failed to capture screen</string>
+    <string name="share_failed">Share failed: %1$s</string>
+
+    <!-- Image descriptions -->
+    <string name="baby_photo_description">Baby\'s photo</string>
+    <string name="default_baby_photo_description">Default baby photo</string>
+    <string name="nanit_logo_description">Nanit Logo</string>
+    <string name="age_number_description">Age %1$d</string>
+    <string name="add_picture_description">Add picture</string>
+
+    <!-- Error messages -->
+    <string name="no_data_available">No data available. Please enter name and DOB in the server app.</string>
+    <string name="empty_response_from_server">Empty response from server</string>
+    <string name="invalid_data_format">Invalid data format from server</string>
+    <string name="failed_to_save_image">Failed to save image</string>
+    <string name="unknown_error_occurred">Unknown error occurred</string>
+    <string name="no_response_timeout">No response from server (timeout)</string>
+    <string name="invalid_response_format">Invalid response format</string>
+    <string name="invalid_ip_or_port">Invalid IP address or port</string>
 </resources>

@@ -2,6 +2,7 @@ package com.example.nanitbirthdayapp.data.repository
 
 import android.content.Context
 import android.net.Uri
+import com.example.nanitbirthdayapp.R
 import com.example.nanitbirthdayapp.core.Resource
 import com.example.nanitbirthdayapp.data.local.SharedPreferencesManager
 import com.example.nanitbirthdayapp.data.mapper.toDomain
@@ -42,16 +43,16 @@ class BirthdayRepositoryImpl @Inject constructor(
     private fun parseResponse(jsonText: String): BirthdayInfo {
         return when {
             jsonText == "null" -> {
-                throw Exception("No data available. Please enter name and DOB in the server app.")
+                throw Exception(context.getString(R.string.no_data_available))
             }
             jsonText.isBlank() -> {
-                throw Exception("Empty response from server")
+                throw Exception(context.getString(R.string.empty_response_from_server))
             }
             else -> {
                 try {
                     json.decodeFromString<BirthdayInfo>(jsonText)
                 } catch (e: Exception) {
-                    throw Exception("Invalid data format from server")
+                    throw Exception(context.getString(R.string.invalid_data_format))
                 }
             }
         }
@@ -90,11 +91,11 @@ class BirthdayRepositoryImpl @Inject constructor(
             if (savedUri != null) {
                 emit(Resource.Success(savedUri))
             } else {
-                emit(Resource.Error("Failed to save image"))
+                emit(Resource.Error(context.getString(R.string.failed_to_save_image)))
             }
 
         } catch (e: Exception) {
-            emit(Resource.Error(e.message ?: "Unknown error occurred"))
+            emit(Resource.Error(e.message ?: context.getString(R.string.unknown_error_occurred)))
         }
     }
 

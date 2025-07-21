@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.CachePolicy
@@ -145,7 +146,7 @@ private fun BabyImage(
 
             Image(
                 painter = painter,
-                contentDescription = "Baby's photo",
+                contentDescription = stringResource(R.string.baby_photo_description),
                 modifier = imageModifier,
                 contentScale = ContentScale.Crop
             )
@@ -153,7 +154,7 @@ private fun BabyImage(
     } else {
         Image(
             painter = painterResource(id = theme.getDefaultBabyImageResource()),
-            contentDescription = "Default baby photo",
+            contentDescription = stringResource(R.string.default_baby_photo_description),
             modifier = imageModifier,
             contentScale = ContentScale.Crop
         )
@@ -166,7 +167,7 @@ private fun NanitLogo(
 ) {
     Image(
         painter = painterResource(id = R.drawable.logo_nanit),
-        contentDescription = "Nanit Logo",
+        contentDescription = stringResource(R.string.nanit_logo_description),
         modifier = modifier.size(
             width = BirthdayConst.Dimens.nanitLogoWidth,
             height = BirthdayConst.Dimens.nanitLogoHeight

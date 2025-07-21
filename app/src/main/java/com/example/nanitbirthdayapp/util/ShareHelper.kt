@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
+import com.example.nanitbirthdayapp.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -66,13 +67,13 @@ object ShareHelper {
             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                 type = "image/jpeg"
                 putExtra(Intent.EXTRA_STREAM, imageUri)
-                putExtra(Intent.EXTRA_TEXT, "Check out this birthday celebration! 🎉")
-                putExtra(Intent.EXTRA_SUBJECT, "Happy Birthday!")
+                putExtra(Intent.EXTRA_TEXT, context.getString(R.string.share_birthday_text))
+                putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.share_subject))
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             }
 
-            val chooserIntent = Intent.createChooser(shareIntent, "Share Birthday")
+            val chooserIntent = Intent.createChooser(shareIntent, context.getString(R.string.share_chooser_title))
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
             context.startActivity(chooserIntent)

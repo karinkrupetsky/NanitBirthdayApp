@@ -38,8 +38,8 @@ import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.nanitbirthdayapp.R
 import com.example.nanitbirthdayapp.ui.birthday.constants.BirthdayConst
 import com.example.nanitbirthdayapp.ui.theme.getAgeNumberDrawable
 import com.example.nanitbirthdayapp.ui.theme.getBackgroundImageResource
@@ -173,7 +173,7 @@ private fun BirthdayContent(
                 .height(BirthdayConst.Dimens.shareButtonHeight)
         ) {
             Text(
-                text = "Share the news",
+                text = stringResource(R.string.share_the_news),
                 style = BirthdayConst.TextStyles.shareButtonText
             )
             Spacer(Modifier.width(8.dp))

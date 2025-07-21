@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.nanitbirthdayapp.R
 import com.example.nanitbirthdayapp.core.Resource
 import com.example.nanitbirthdayapp.domain.model.Birthday
 import com.example.nanitbirthdayapp.domain.usecase.CloseConnectionUseCase
@@ -14,7 +15,6 @@ import com.example.nanitbirthdayapp.domain.usecase.UpdateBabyPictureUseCase
 import com.example.nanitbirthdayapp.util.ShareHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -46,10 +46,10 @@ class BirthdayViewModel @Inject constructor(
      */
     fun connectToServer(ip: String, port: String) {
         viewModelScope.launch {
-            _uiState.value = BirthdayUiState(isLoading = true) // Reset state
+            _uiState.value = BirthdayUiState(isLoading = true)
             val portNumber = port.toIntOrNull()
             if (portNumber == null) {
-                _uiState.value = BirthdayUiState(errorMessage = "Invalid port number.")
+                _uiState.value = BirthdayUiState(errorMessage = context.getString(R.string.invalid_port_number))
                 return@launch
             }
 
@@ -139,19 +139,17 @@ class BirthdayViewModel @Inject constructor(
     fun shareBirthday(onCaptureContent: suspend () -> Bitmap?) {
         viewModelScope.launch {
             try {
-                // Capture the content
                 val bitmap = onCaptureContent()
                 if (bitmap != null) {
-                    // Save bitmap and create share intent
                     val success = ShareHelper.saveBitmapAndShare(context, bitmap)
                     if (!success) {
-                        _uiState.update { it.copy(errorMessage = "Failed to share image") }
+                        _uiState.update { it.copy(errorMessage = context.getString(R.string.failed_to_share_image)) }
                     }
                 } else {
-                    _uiState.update { it.copy(errorMessage = "Failed to capture screen") }
+                    _uiState.update { it.copy(errorMessage = context.getString(R.string.failed_to_capture_screen)) }
                 }
             } catch (e: Exception) {
-                _uiState.update { it.copy(errorMessage = "Share failed: ${e.message}") }
+                _uiState.update { it.copy(errorMessage = context.getString(R.string.share_failed, e.message ?: "")) }
             }
         }
     }

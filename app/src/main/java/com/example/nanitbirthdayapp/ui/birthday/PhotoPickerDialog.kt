@@ -17,8 +17,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.nanitbirthdayapp.R
 
 @Composable
 fun PhotoPickerDialog(
@@ -34,10 +36,9 @@ fun PhotoPickerDialog(
         contract = ActivityResultContracts.TakePicture()
     ) { success ->
         if (success) {
-            // Handle camera result - i'll need to implement camera URI handling
             onDismiss()
         } else {
-            onError("Failed to capture photo")
+            onError(context.getString(R.string.failed_to_capture_photo))
             onDismiss()
         }
     }
@@ -49,7 +50,7 @@ fun PhotoPickerDialog(
         if (uri != null) {
             onPhotoSelected(uri)
         } else {
-            onError("No image selected")
+            onError(context.getString(R.string.no_image_selected))
         }
         onDismiss()
     }
@@ -70,7 +71,7 @@ fun PhotoPickerDialog(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Text(
-                        text = "Choose Photo",
+                        text = stringResource(R.string.choose_photo),
                         style = MaterialTheme.typography.headlineSmall
                     )
 
@@ -79,20 +80,20 @@ fun PhotoPickerDialog(
                             try {
                                 galleryLauncher.launch("image/*")
                             } catch (e: Exception) {
-                                onError("Failed to open gallery: ${e.message}")
+                                onError(context.getString(R.string.failed_to_open_gallery, e.message ?: ""))
                                 onDismiss()
                             }
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Choose from Gallery")
+                        Text(stringResource(R.string.choose_from_gallery))
                     }
 
                     OutlinedButton(
                         onClick = onDismiss,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Cancel")
+                        Text(stringResource(R.string.cancel))
                     }
                 }
             }

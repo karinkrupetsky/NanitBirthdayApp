@@ -5,8 +5,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.nanitbirthdayapp.R
 import com.example.nanitbirthdayapp.ui.birthday.BirthdayViewModel
 import com.example.nanitbirthdayapp.ui.navigation.Screen
 
@@ -35,13 +37,13 @@ fun ConnectionScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Connect to Server", style = MaterialTheme.typography.headlineMedium)
+        Text(stringResource(R.string.connect_to_server), style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(16.dp))
 
         OutlinedTextField(
             value = ipAddress,
             onValueChange = { ipAddress = it },
-            label = { Text("IP Address") },
+            label = { Text(stringResource(R.string.ip_address)) },
             isError = uiState.errorMessage != null
         )
         Spacer(modifier = Modifier.height(8.dp))
@@ -49,7 +51,7 @@ fun ConnectionScreen(
         OutlinedTextField(
             value = port,
             onValueChange = { port = it },
-            label = { Text("Port") },
+            label = { Text(stringResource(R.string.port)) },
             isError = uiState.errorMessage != null
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -58,7 +60,7 @@ fun ConnectionScreen(
             CircularProgressIndicator()
         } else {
             Button(onClick = { viewModel.connectToServer(ipAddress, port) }) {
-                Text("Connect")
+                Text(stringResource(R.string.connect))
             }
         }
 
