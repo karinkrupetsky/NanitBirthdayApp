@@ -46,12 +46,6 @@ The project includes unit tests to verify core functionality:
 -   **`ResourceTest`**: Tests the `Resource` wrapper class that handles loading, success, and error states throughout the app.
 -   **`IntegrationTest`**: Placeholder for architectural validation tests.
 
-### Test Coverage
--   Core data structures (`Resource` wrapper)
--   Clean Architecture compliance verification
-
-Run tests with: `./gradlew test`
-
 ## Project Structure
 
 The project is organized by layer, keeping the code clean and easy to find.
@@ -87,8 +81,3 @@ com.example.nanitbirthdayapp
 2.  Open the project in Android Studio.
 3.  Run the application on an Android emulator or a physical device.
 4.  **Note**: This app requires a corresponding server application running on the local network to provide the birthday data. Enter the server's IP address and port to connect.
-
-### Emulator Connection
-
--   To connect from the Android Emulator to a server running on your computer (localhost), use the special IP address: **`10.0.2.2`**.
--   For quick UI testing without a server, you can use the **"Skip for Debug"** button on the connection screen.
