@@ -4,9 +4,9 @@ A simple Android app that pulls a baby's birthday from a local server, shows a c
 
 ## Screenshots
 
-| Connection Screen                               | Birthday Celebration                                 |
-| :---------------------------------------------: | :--------------------------------------------------: |
-| ![Connection Screen](screenshots/img.png) | ![Birthday Screen](screenshots/img_1.png) |
+| Connection Screen | Birthday Celebration |
+|:-----------------:|:--------------------:|
+| <img src="screenshots/img.png" width="300"> | <img src="screenshots/img_1.png" width="300"> |
 
 ## What it Does
 
@@ -26,7 +26,6 @@ Here's the breakdown:
 -   **`UI (Presentation)`**: The user-facing part of the app, built with Jetpack Compose. It gets data from the `ViewModel`.
 -   **`Domain`**: The core logic. This layer is pure Kotlin and has no Android dependencies. It defines the "what" of the app (e.g., "get birthday info").
 -   **`Data`**: The implementation layer. It's responsible for actually getting the data, whether from a WebSocket or local `SharedPreferences`.
-
 
 ## Tech Stack
 
@@ -74,3 +73,8 @@ com.example.nanitbirthdayapp
 2.  Open the project in Android Studio.
 3.  Run the application on an Android emulator or a physical device.
 4.  **Note**: This app requires a corresponding server application running on the local network to provide the birthday data. Enter the server's IP address and port to connect.
+
+### Emulator Connection
+
+-   To connect from the Android Emulator to a server running on your computer (localhost), use the special IP address: **`10.0.2.2`**.
+-   For quick UI testing without a server, you can use the **"Skip for Debug"** button on the connection screen.
